@@ -1,21 +1,22 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-import { MailIcon } from "lucide-react";
+import { MailIcon, Linkedin, Github, Phone } from "lucide-react";
 
 export default function Footer() {
-  // get the current time in UTC+1 time zone
+  // get the current time in IST (Asia/Kolkata)
   const [time, setTime] = useState<string>("");
 
   useEffect(() => {
     const interval = setInterval(() => {
       const date = new Date();
-      date.setHours(date.getHours());
+      // Display time in IST (Asia/Kolkata)
       setTime(
         date.toLocaleTimeString("en-US", {
           hour12: true,
           hour: "numeric",
           minute: "numeric",
+          timeZone: "Asia/Kolkata",
         }),
       );
     }, 1000);
@@ -24,35 +25,62 @@ export default function Footer() {
 
   return (
     <footer className="w-full bg-gradient-to-t from-primary/[1%] to-transparent">
-      <div className="container mx-auto flex flex-row items-center justify-between py-6">
-        <span className="flex flex-row items-center space-x-4">
+      <div className="container mx-auto py-8">
+        {/* Contact Links */}
+        <div className="flex flex-wrap items-center justify-center gap-4 mb-6">
+          <a
+            href="mailto:sahilislam619@gmail.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Email sahilislam619@gmail.com"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-muted/30 bg-background/60 text-muted-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary"
+          >
+            <MailIcon className="h-5 w-5" />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/sahil-islam-b1955825a/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn profile"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-muted/30 bg-background/60 text-muted-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary"
+          >
+            <Linkedin className="h-5 w-5" />
+          </a>
+          <a
+            href="https://github.com/kenpachi11zx"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub profile"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-muted/30 bg-background/60 text-muted-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary"
+          >
+            <Github className="h-5 w-5" />
+          </a>
+          <a
+            href="tel:+916003021379"
+            aria-label="Call +91 6003021379"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-muted/30 bg-background/60 text-muted-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary"
+          >
+            <Phone className="h-5 w-5" />
+          </a>
+        </div>
+
+        {/* Footer Bottom */}
+        <div className="flex flex-row items-center justify-between gap-4 pt-4 border-t border-muted/30">
           <p className="text-xs text-muted-foreground">
-            Made with ❤️ by{" "}
+            Local time: <span className="font-semibold">{time} IST</span>
+          </p>
+          <p className="text-xs text-muted-foreground">
+            © 2025{" "}
             <Link
-              href="https://github.com/wendoj"
+              href="https://github.com/kenpachi11zx"
               target="_blank"
               passHref
               className="text-foreground transition hover:text-primary"
             >
-              wendoj
+              Sahil
             </Link>
           </p>
-          <hr className="hidden h-6 border-l border-muted md:flex" />
-          <span className="flex hidden flex-row items-center space-x-2 md:flex">
-            <p className="text-xs text-muted-foreground">Local time:</p>
-            <p className="text-sm font-semibold">{time} UTC+1</p>
-          </span>
-        </span>
-        <Link
-          href="mailto:wendoj@proton.me"
-          passHref
-          className="text-xs text-muted-foreground hover:text-foreground"
-        >
-          <Button variant={"outline"}>
-            <MailIcon className="h-4 w-4 md:mr-2" />
-            <span className="hidden md:flex">wendoj@proton.me</span>
-          </Button>
-        </Link>
+        </div>
       </div>
       <div className="h-1 bg-[radial-gradient(closest-side,#8486ff,#42357d,#5d83ff,transparent)] opacity-50" />
     </footer>

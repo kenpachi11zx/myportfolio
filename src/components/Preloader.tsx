@@ -25,12 +25,12 @@ const slideUp = {
 
 const words = [
   "Hello",
+  "नमस्ते",
+  "নমস্কাৰ",
   "Bonjour",
   "Ciao",
   "Olà",
   "やあ",
-  "Hallå",
-  "Guten tag",
   "Hallo",
 ];
 

@@ -2,12 +2,15 @@
 
 A sleek, modern, and responsive portfolio bootstrapped with [create-t3-app](https://create.t3.gg/).
 
-[Website Preview](https://github.com/wendoj/portfolio/assets/77996774/b73b02d7-0657-41e3-9124-e6d04b17fe93)
+[🔗 Link to portfolio](https://devxfolio.netlify.app/)
 
-[🔗 Link to portfolio](https://wendoj.vercel.app)
+This is the portfolio website of **Sahil Islam**, a Full Stack Developer based in Guwahati. The portfolio showcases 8 featured projects including enterprise applications, AI-powered solutions, and full-stack web applications built with .NET Core, React, Python, AWS, and more.
 
-All you need to know about me, my projects and skills can be found here. Personalize the portfolio by modifying `src/pages/index.tsx` and `src/styles/globals.css` to emulate your own portfolio. Made some improvements and want to share? Open a pull request.
-For any issues, feel free to report them here.
+## About
+
+I am a Full Stack developer focused on creating interactive digital experiences on the web, working with technologies such as .NET Core, React, Python, AWS, SQL Server, and Entity Framework amongst others. Currently pursuing Bachelor of Technology in Computer Science & Engineering at The Assam Kaziranga University (2022-2026).
+
+**Work Experience:** Software Development Intern at Indian Oil Corporation Limited (IOCL) - June 2025 to July 2025. Developed secure enterprise portal using ASP.NET Core MVC, implemented multi-level approval system with RBAC for 8 user roles.
 
 ## 🎉 Features
 - **Responsive Design**: The portfolio is designed to be fully responsive, providing an optimal viewing experience across a wide range of devices from desktops to mobile phones.
@@ -28,12 +31,12 @@ Follow the steps below to clone and run this project on your local system:
 
 ```bash
 # Clone the repository
-$ git clone https://github.com/wendoj/developer-portfolio.git
+$ git clone https://github.com/sahilislam619/developer-portfolio.git
 
 # Navigate to the project directory
 $ cd developer-portfolio
 
-# Remove current origin repository
+# Remove current origin repository (if needed)
 $ git remote remove origin
 ```
 
