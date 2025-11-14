@@ -53,6 +53,48 @@ $ npm run dev
 Now, open your browser and navigate to `http://localhost:3000` to view your portfolio live.
 
 
-## How do I deploy this?
+## 🚀 Deployment
+
+### Deploy to Netlify
+
+1. **Push your code to GitHub/GitLab/Bitbucket**
+
+2. **Connect to Netlify:**
+   - Go to [Netlify](https://www.netlify.com/)
+   - Click "Add new site" → "Import an existing project"
+   - Connect your Git repository
+
+3. **Configure Build Settings:**
+   - Build command: `pnpm build`
+   - Publish directory: `.next` (auto-detected by Netlify)
+   - Node version: `18` (specified in `.nvmrc`)
+
+4. **Set Environment Variables:**
+   In Netlify dashboard, go to Site settings → Environment variables and add:
+   ```
+   GEMINI_API_KEY=your_gemini_api_key_here
+   GEMINI_MODEL=gemini-2.5-flash (optional)
+   NODE_ENV=production
+   SKIP_ENV_VALIDATION=false (set to true only if you want to skip validation)
+   ```
+
+5. **Deploy:**
+   - Click "Deploy site"
+   - Netlify will automatically build and deploy your site
+   - Your site will be available at `https://your-site-name.netlify.app`
+
+### Environment Variables
+
+Create a `.env.local` file in the root directory for local development:
+
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_MODEL=gemini-2.5-flash
+NODE_ENV=development
+```
+
+**Note:** Never commit `.env.local` to version control. It's already in `.gitignore`.
+
+### Other Deployment Options
 
 Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.

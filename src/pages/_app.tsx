@@ -3,6 +3,7 @@ import { type AppType } from "next/dist/shared/lib/utils";
 import "@/styles/globals.css";
 import "@/styles/locomotive-scroll.css";
 import ChatBox from "@/components/ChatBox";
+import Game from "@/components/Game";
 
 import { DM_Sans } from "next/font/google";
 
@@ -16,6 +17,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     <div lang={"en"} className={dmSans.className}>
       <Component {...pageProps} />
       <ChatBox />
+      <Game />
     </div>
   );
 };

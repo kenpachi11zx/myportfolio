@@ -15,7 +15,8 @@ export default function ChatBox() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hello! I'm your AI assistant powered by Gemini Flash. How can I help you today?",
+      content:
+        "Hello! I'm Sahil Islam's AI assistant. I can help you learn about his skills, projects, experience, or provide contact details. What would you like to know?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -45,18 +46,164 @@ export default function ChatBox() {
     setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
     setIsLoading(true);
 
-    // Simulate API delay for better UX
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    setMessages((prev) => [
-      ...prev,
-      {
-        role: "assistant",
-        content: "The chat feature is currently under maintenance. Please check back later. Thank you for your patience!",
+    // Portfolio context data - structured for AI assistant
+    const portfolioContext = {
+      owner: {
+        name: "Sahil Islam",
+        title: "Full Stack Developer",
+        location: "Guwahati, Assam, India",
+        education: "Bachelor of Technology in Computer Science & Engineering at The Assam Kaziranga University (2022-2026)",
       },
-    ]);
-    
-    setIsLoading(false);
+      personalDetails: {
+        dateOfBirth: "30 April, 2004",
+        hometown: "Guwahati, Assam",
+        nationality: "India",
+      },
+      projects: [
+        {
+          name: "CuraAI – Virtual AI Health Assistant",
+          description: "A production-ready Flask-based AI health assistant.",
+          type: "AI Integration / Production-Ready Flask App",
+          liveUrl: "https://curaai-ky7e.onrender.com/",
+        },
+        {
+          name: "Moon Films Portfolio – Creative Agency Website",
+          description: "A modern video-editing/visual storytelling portfolio website.",
+          type: "Frontend Development / Creative Agency Website",
+          liveUrl: "https://moonfilms.netlify.app/",
+        },
+        {
+          name: "GitHub Profile Explorer",
+          description: "A real-time GitHub profile viewer with API integration.",
+          type: "Frontend Development / API Integration",
+          liveUrl: "https://gitfetchprofile.netlify.app/",
+        },
+        {
+          name: "Developer Portfolio Website",
+          description: "A personal, responsive developer portfolio.",
+          type: "Frontend Development / Modern Web Technologies",
+          liveUrl: "https://devxfolio.netlify.app/",
+        },
+        {
+          name: "IOCL HSE Compliance Portal",
+          description: "An enterprise-grade ASP.NET Core MVC compliance system.",
+          type: "Enterprise Development / ASP.NET Core MVC",
+          codeUrl: "https://github.com/kenpachi11zx/IOCLCompliancePortalV1.2",
+        },
+      ],
+      technologies: {
+        languages: ["C#", "Python", "JavaScript", "TypeScript"],
+        frontend: ["HTML", "CSS", "Tailwind CSS", "React", "Next.js"],
+        backend: [".NET Core", "Flask"],
+        databases: ["MySQL", "Microsoft SQL Server"],
+        tools: ["Git", "GitHub", "Visual Studio", "VS Code"],
+        other: ["API integration", "BeautifulSoup", "AWS basics"],
+      },
+      softSkills: [
+        "Teamwork",
+        "Problem Solving",
+        "Time Management",
+        "Adaptability",
+        "Quick Learner",
+        "Communication",
+      ],
+      extraCurricular: [
+        "Cricket",
+        "Video Editing",
+        "Graphic Designing",
+      ],
+      languages: [
+        "English (Read/Write/Speak)",
+        "Hindi (Read/Write/Speak)",
+        "Assamese (Read/Write/Speak)",
+      ],
+      certificates: [
+        {
+          name: "AWS Academy Graduate - Machine Learning Foundations",
+          issuer: "AWS Academy",
+          date: "February 2024",
+        },
+        {
+          name: "Hands-On Web Development with JavaScript",
+          issuer: "Infosys Springboard",
+          date: "May 2024",
+        },
+        {
+          name: "Python 101 for Data Science",
+          issuer: "IBM (Cognitive Class)",
+          date: "April 2025",
+        },
+      ],
+      contact: {
+        email: "sahilislam619@gmail.com",
+        phone: "+91 6003021379",
+        linkedin: "https://www.linkedin.com/in/sahil-islam-b1955825a/",
+        github: "https://github.com/kenpachi11zx",
+      },
+    };
+
+    try {
+      const resp = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          message: userMessage, 
+          history: messages,
+          context: portfolioContext,
+        }),
+      });
+
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        const errMsg = err?.error || "Failed to fetch response from server.";
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: `Error: ${errMsg}`,
+          },
+        ]);
+        return;
+      }
+
+      const data = await resp.json();
+      const assistantText = data?.message || data?.reply || "(no response)";
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: String(assistantText),
+        },
+      ]);
+    } catch (e) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content:
+            "Network error: Unable to reach the chat server. Please try again later.",
+        },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Quick suggestion buttons (like the example UI your friend has)
+  const suggestions = [
+    "What projects have you built?",
+    "What technologies do you use?",
+    "How can I contact you?",
+  ];
+
+  const handleSuggestion = (text: string) => {
+    // set input and send immediately for quick UX
+    setInput(text);
+    // small timeout to ensure state updates before sending
+    setTimeout(() => {
+      handleSend();
+    }, 50);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -65,6 +212,8 @@ export default function ChatBox() {
       handleSend();
     }
   };
+
+  const firstMessage = messages.length > 0 ? messages[0] : null;
 
   return (
     <>
@@ -133,9 +282,54 @@ export default function ChatBox() {
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent">
-              {messages.map((message, index) => (
+              {/* Render first (welcome) message first, then suggestions, then remaining messages */}
+              {firstMessage && (
                 <motion.div
-                  key={index}
+                  key={`first-msg`}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className={cn(
+                    "flex",
+                    firstMessage.role === "user" ? "justify-end" : "justify-start"
+                  )}
+                >
+                  <div
+                    className={cn(
+                      "max-w-[80%] rounded-2xl px-4 py-2.5",
+                      firstMessage.role === "user"
+                        ? "bg-gradient-to-br from-primary to-secondary text-primary-foreground"
+                        : "bg-muted/50 text-foreground border border-muted/30"
+                    )}
+                  >
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                      {firstMessage.content}
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Quick suggestions (shown after welcome message) */}
+              <div className="mb-3 flex flex-wrap gap-2">
+                {suggestions.map((s, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleSuggestion(s)}
+                    className={cn(
+                      "rounded-full border border-muted/20 px-3 py-1 text-xs",
+                      "bg-background/60 hover:bg-primary/5 text-foreground",
+                      "transition"
+                    )}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+
+              {/* Render remaining messages (skip index 0) */}
+              {messages.slice(1).map((message, idx) => (
+                <motion.div
+                  key={idx + 1}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2 }}

@@ -24,6 +24,7 @@ type NavProps = {
   href: string;
   i: number;
   className?: string;
+  onClick?: () => void;
 };
 
 const variants = {
@@ -56,6 +57,13 @@ function handleClick(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
 }
 
 function NavItem(props: NavProps) {
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    handleClick(e);
+    if (props.onClick) {
+      props.onClick();
+    }
+  };
+
   return (
     <motion.li
       className={props.className}
@@ -67,7 +75,7 @@ function NavItem(props: NavProps) {
     >
       <a
         href={props.href}
-        onClick={handleClick}
+        onClick={handleNavClick}
         className={cn(props.i === 0 && "nav-active", "nav-link")}
       >
         {props.text}
@@ -219,14 +227,14 @@ export default function Container(props: ContainerProps) {
                   {/* Links */}
                   <ul className="flex w-full flex-col items-start space-y-4 px-6 py-6">
                     {navLinks.map((link, i) => (
-                      <button key={link.href} onClick={() => setIsOpen(false)} className="w-full text-left">
-                        <NavItem
-                          href={link.href}
-                          text={link.text}
-                          i={i}
-                          className="text-lg"
-                        />
-                      </button>
+                      <NavItem
+                        key={link.href}
+                        href={link.href}
+                        text={link.text}
+                        i={i}
+                        className="text-lg"
+                        onClick={() => setIsOpen(false)}
+                      />
                     ))}
                   </ul>
 

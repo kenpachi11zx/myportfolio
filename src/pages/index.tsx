@@ -340,7 +340,7 @@ export default function Home() {
                 data-scroll-speed=".06"
                 className="mt-1 max-w-lg tracking-tight text-muted-foreground 2xl:text-xl"
               >
-                A Full Stack developer based in Guwahati focused on creating interactive digital experiences on the web.
+                A Modern Full-Stack Developer. I enjoy building fast, intuitive, and clean digital products with a strong focus on user experience.
               </p>
             </div>
             <span
@@ -349,11 +349,11 @@ export default function Home() {
               data-scroll-speed=".06"
               className="flex flex-row flex-wrap items-center gap-3 pt-6"
             >
-              <Link href="mailto:sahilislam619@gmail.com" passHref>
+              <a href="mailto:sahilislam619@gmail.com">
                 <Button>
                   Get in touch <ChevronRight className="ml-1 h-4 w-4" />
                 </Button>
-              </Link>
+              </a>
               <a
                 href="/RESUME.pdf"
                 target="_blank"
@@ -413,47 +413,52 @@ export default function Home() {
               
               <p className="text-base sm:text-lg leading-relaxed tracking-tight text-muted-foreground xl:text-xl">
                 I work with technologies such as{" "}
-                <Link
-                  href="https://dotnet.microsoft.com/"
-                  target="_blank"
-                  className="underline hover:text-primary transition-colors"
-                >
-                  .NET Core
-                </Link>
-                ,{" "}
-                <Link
+                <a
                   href="https://react.dev/"
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="underline hover:text-primary transition-colors"
                 >
                   React
-                </Link>
+                </a>
                 ,{" "}
-                <Link
+                <a
                   href="https://www.python.org/"
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="underline hover:text-primary transition-colors"
                 >
                   Python
-                </Link>
+                </a>
                 ,{" "}
-                <Link
+                <a
+                  href="https://dotnet.microsoft.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-primary transition-colors"
+                >
+                  .NET Core
+                </a>
+                ,{" "}
+                <a
                   href="https://aws.amazon.com/"
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="underline hover:text-primary transition-colors"
                 >
                   AWS
-                </Link>
+                </a>
                 ,{" "}
                 
-                , and{" "}
-                <Link
-                  href="https://www.microsoft.com/en-us/sql-server"
+                 and{" "}
+                <a
+                  href="https://www.mysql.com/"
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="underline hover:text-primary transition-colors"
                 >
-                  SQL Server
-                </Link>
+                  MySQL
+                </a>
                 
                 {" "}amongst others to achieve this.
               </p>
@@ -515,7 +520,7 @@ export default function Home() {
                   <h3 className="text-xl font-semibold tracking-tight">Languages</h3>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  {["C#", "Python", "JavaScript", "HTML", "CSS"].map((lang) => (
+                  {["C#", "Python", "JavaScript", "TypeScript", "HTML", "CSS"].map((lang) => (
                     <motion.div
                       key={lang}
                       whileHover={{ scale: 1.05, y: -2 }}
@@ -540,7 +545,7 @@ export default function Home() {
                   <h3 className="text-xl font-semibold tracking-tight">Frameworks & Libraries</h3>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  {[".NET Core", "React", "Flask", "BeautifulSoup", "Tailwind CSS"].map((framework) => (
+                  {[".NET Core", "React", "Next.js", "Flask", "BeautifulSoup", "Tailwind CSS"].map((framework) => (
                     <motion.div
                       key={framework}
                       whileHover={{ scale: 1.05, y: -2 }}
@@ -701,7 +706,12 @@ export default function Home() {
                                   )}
                                 </a>
                               ) : (
-                                <Link href={project.href} target="_blank" passHref>
+                                <a
+                                  href={project.href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="block"
+                                >
                                   {project.image.match(/\.(webm|mp4|mov)$/i) ? (
                                     <ProjectVideo 
                                       src={project.image} 
@@ -718,7 +728,7 @@ export default function Home() {
                                       className="aspect-video h-full w-full rounded-t-md bg-primary object-cover"
                                     />
                                   )}
-                                </Link>
+                                </a>
                               )}
                             </CardHeader>
                             <CardContent className="absolute bottom-0 w-full bg-background/50 backdrop-blur">
@@ -842,12 +852,12 @@ export default function Home() {
         </section>
 
         {/* Contact */}
-        <section id="contact" data-scroll-section className="my-24 sm:my-32 xl:my-40">
+        <section id="contact" data-scroll-section className="my-24 sm:my-32 xl:my-40 mb-24">
           <div
             data-scroll
             data-scroll-speed=".4"
             data-scroll-position="top"
-            className="flex flex-col items-center justify-center rounded-lg bg-gradient-to-br from-primary/[6.5%] to-white/5 px-8 py-16 text-center xl:py-24"
+            className="flex flex-col items-center justify-center rounded-lg bg-gradient-to-br from-primary/[6.5%] to-white/5 px-8 py-16 text-center xl:py-24 relative z-10"
           >
             <h2 className="text-4xl font-medium tracking-tighter xl:text-6xl">
               Let&apos;s work{" "}
@@ -856,9 +866,9 @@ export default function Home() {
             <p className="mt-1.5 text-base tracking-tight text-muted-foreground xl:text-lg">
               Got a question, proposal or project or want to work together on something? Feel free to reach out.
             </p>
-            <Link href="mailto:sahilislam619@gmail.com" passHref>
+            <a href="mailto:sahilislam619@gmail.com">
               <Button className="mt-6">Get in touch</Button>
-            </Link>
+            </a>
           </div>
         </section>
       </div>

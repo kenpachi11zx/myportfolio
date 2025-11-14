@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { MailIcon, Linkedin, Github, Phone } from "lucide-react";
@@ -71,14 +70,14 @@ export default function Footer() {
           </p>
           <p className="text-xs text-muted-foreground">
             © 2025{" "}
-            <Link
+            <a
               href="https://github.com/kenpachi11zx"
               target="_blank"
-              passHref
+              rel="noopener noreferrer"
               className="text-foreground transition hover:text-primary"
             >
               Sahil
-            </Link>
+            </a>
           </p>
         </div>
       </div>

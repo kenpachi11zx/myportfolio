@@ -12,15 +12,18 @@ export default async function handler(
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { message, history } = req.body;
+  const { message, history, context } = req.body;
 
   if (!message) {
     return res.status(400).json({ error: "Message is required" });
   }
 
   try {
-    // Using gemini-1.5-flash (stable). For latest experimental, use "gemini-2.0-flash-exp"
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // Choose model from env if provided. Default to gemini-2.5-flash.
+    // You can set `GEMINI_MODEL` in your environment (e.g. `.env.local`) to override.
+    // Available models: gemini-2.5-flash, gemini-pro, gemini-1.5-pro
+    const modelName = env.GEMINI_MODEL ?? "gemini-2.5-flash";
+    const model = genAI.getGenerativeModel({ model: modelName });
 
     // Filter and build conversation history
     // Gemini requires: first message must be from user, messages must alternate
@@ -66,7 +69,42 @@ export default async function handler(
       },
     });
 
-    const result = await chat.sendMessage(String(message));
+    // Portfolio assistant instructions
+    const portfolioPrompt = `You are the personal assistant for Sahil Islam, a Full Stack Developer. Use the following structured portfolio information to answer questions accurately and helpfully.
+
+PORTFOLIO INFORMATION:
+${context ? JSON.stringify(context, null, 2) : "No context provided"}
+
+INSTRUCTIONS:
+- Always use the EXACT information from the portfolio context above. Never use placeholders like [Owner's Name] or [Owner's Email].
+- When asked about projects, provide them in a structured format:
+  * Project name
+  * Brief description
+  * Type/category
+  * Live URL or Code URL (whichever is available)
+- When asked about technologies, organize them by category (Languages, Frontend, Backend, Databases, Tools, Other).
+- When asked about soft skills, list: Teamwork, Problem Solving, Time Management, Adaptability, Quick Learner, Communication.
+- When asked about extracurricular activities, mention: Cricket, Video Editing, Graphic Designing.
+- When asked about languages, list: English, Hindi, Assamese (all Read/Write/Speak).
+- When asked about certificates/achievements, provide:
+  * Certificate name
+  * Issuing organization
+  * Completion date
+- When asked about personal details, provide: DOB (30 April, 2004), Hometown (Guwahati, Assam), Nationality (India).
+- When asked about contact information, provide:
+  * Email: sahilislam619@gmail.com
+  * Phone: +91 6003021379
+  * LinkedIn: https://www.linkedin.com/in/sahil-islam-b1955825a/
+  * GitHub: https://github.com/kenpachi11zx
+- Keep answers concise and well-structured (2-4 sentences for short answers, more if asked for details).
+- Be friendly, professional, and helpful.
+- Format lists with clear structure and bullet points.
+- If asked about something not in the context, say you don't have that information rather than making it up.
+`;
+
+    const composedMessage = `${portfolioPrompt}\n\nUser: ${String(message)}`;
+
+    const result = await chat.sendMessage(composedMessage);
     const response = await result.response;
     const text = response.text();
     
@@ -84,12 +122,34 @@ export default async function handler(
   } catch (error) {
     console.error("Gemini API error:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    const errorDetails = error instanceof Error ? error.stack : undefined;
+    const errorDetails = error instanceof Error ? (error as any).stack : undefined;
     console.error("Error details:", errorDetails);
-    
-    return res.status(500).json({ 
-      error: "Failed to get response from AI",
-      details: errorMessage
+
+    // If the error looks like an unsupported/unknown model (404)
+    const statusCode = (error as any)?.status;
+    if (statusCode === 404 || (typeof errorMessage === "string" && errorMessage.includes("is not found"))) {
+      console.error("Model not found. Try using: gemini-pro, gemini-1.5-pro, or check Google AI Studio for available models.");
+      return res.status(500).json({
+        error: "Model not found or unsupported for this API version",
+        details: errorMessage,
+        suggestion:
+          "Set GEMINI_MODEL to a supported model (e.g., gemini-pro) in .env.local and restart the dev server.",
+      });
+    }
+
+    // Provide more helpful error messages
+    let userFriendlyError = "Failed to get response from AI";
+    if (errorMessage.includes("API_KEY")) {
+      userFriendlyError = "API key is missing or invalid. Please check your GEMINI_API_KEY environment variable.";
+    } else if (errorMessage.includes("quota") || errorMessage.includes("rate limit")) {
+      userFriendlyError = "API quota exceeded. Please check your Google Cloud billing and quotas.";
+    } else if (errorMessage.includes("not found") || errorMessage.includes("404")) {
+      userFriendlyError = "Model not found. Please check your GEMINI_MODEL environment variable.";
+    }
+
+    return res.status(500).json({
+      error: userFriendlyError,
+      details: process.env.NODE_ENV === "development" ? errorMessage : undefined,
     });
   }
 }
