@@ -199,7 +199,7 @@ export default function Game() {
       });
 
       // Increase game speed based on time and score (more aggressive)
-      const baseSpeedIncrease = 0.005; // Base speed increase per frame
+      const baseSpeedIncrease = 0.003; // Base speed increase per frame
       const scoreBasedIncrease = currentScoreRef.current * 0.0001; // Additional speed based on score
       const totalIncrease = baseSpeedIncrease + scoreBasedIncrease;
       gameSpeedRef.current = Math.min(gameSpeedRef.current + totalIncrease, 20);
