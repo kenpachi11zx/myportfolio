@@ -71,7 +71,7 @@ export default function Game() {
     };
     
     obstaclesRef.current = [];
-    gameSpeedRef.current = 5;
+    gameSpeedRef.current = 3;
     lastObstacleTimeRef.current = 0;
     currentScoreRef.current = 0;
     setScore(0);
